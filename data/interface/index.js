@@ -253,8 +253,9 @@ var config = {
     "element": null,
     "init": function () {
       if (config.worker.element) config.worker.element.terminate();
-      config.worker.element = new Worker("vendor/worker-asm.js");
+      var path = chrome.runtime.getURL("/data/interface/vendor/worker-asm.js");
       /*  */
+      config.worker.element = new Worker(path);
       config.worker.element.onmessage = function (e) {
         var message = e.data;
         if (message.type === "start") config.element.output.textContent = "Video & Audio Muxer received a command.\n\n";
