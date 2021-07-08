@@ -1,0 +1,35 @@
+{
+  "version": "0.1.2",
+  "manifest_version": 2,
+  "offline_enabled": true,
+  "name": "Video & Audio Muxer",
+  "short_name": "video-audio-muxer",
+  "permissions": ["storage", "contextMenus"],
+  "homepage_url": "https://mybrowseraddon.com/video-audio-muxer.html",
+  "description": "Mux video and audio files from selected formats inside your browser!",
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "lib/config.js", 
+      "lib/chrome.js",
+      "lib/runtime.js",
+      "lib/common.js"
+    ]
+  },
+  "browser_action": {
+    "default_title": "Video & Audio Muxer",
+    "default_icon": {
+      "16": "data/icons/16.png",
+      "32": "data/icons/32.png",
+      "48": "data/icons/48.png",
+      "64": "data/icons/64.png"
+    }
+  },
+  "icons": {
+    "16": "data/icons/16.png",
+    "32": "data/icons/32.png",
+    "48": "data/icons/48.png",
+    "64": "data/icons/64.png",
+    "128": "data/icons/128.png"
+  }
+}
