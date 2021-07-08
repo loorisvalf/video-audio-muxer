@@ -251,9 +251,14 @@ var config = {
   "worker": {
     "ready": false,
     "element": null,
-    "init": function () {
+    "init": async function () {
       if (config.worker.element) config.worker.element.terminate();
-      config.worker.element = new Worker("/data/interface/vendor/worker-asm.js");
+      var response = await fetch(chrome.runtime.getURL("/data/interface/vendor/worker-asm.js"));
+      var workerasm = await response.text();
+      var workerblob = new Blob([workerasm], {"type": "text/javascript"})
+      /*  */
+      config.worker.element = new Worker(URL.createObjectURL(workerblob));
+      config.worker.element.postMessage({"type": "import", "path": chrome.runtime.getURL("/data/interface/vendor/ffmpeg/ffmpeg-all-codecs.js")});
       config.worker.element.onmessage = function (e) {
         var message = e.data;
         if (message.type === "start") config.element.output.textContent = "Video & Audio Muxer received a command.\n\n";
