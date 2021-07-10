@@ -1,5 +1,11 @@
 var core = {};
 
+core.now = Date.now;
+
+core.log = function (data) {
+  postMessage({"type": "stdout", "data": data});
+};
+
 core.ffmpeg = {
   "url": '', 
   "path": '',
@@ -24,13 +30,13 @@ core.ffmpeg.fetch = () => {
   });
 };
 
-core.now = Date.now;
-core.log = function (data) {postMessage({'type': 'stdout', 'data': data})};
-
 onmessage = function (e) {
   if (e.data.type === "import") {
     core.ffmpeg.path = e.data.path;
-    core.ffmpeg.fetch();
+    /*  */
+    if (core.ffmpeg.path) {
+      core.ffmpeg.fetch();
+    }
   }
   /*  */
   if (e.data.type === "command") {
@@ -42,15 +48,15 @@ onmessage = function (e) {
       "arguments": e.data.arguments || []
     };
     /*  */
-    postMessage({'type' : 'start', 'data' : Module.arguments.join(" ")});
-    postMessage({'type' : 'stdout', 'data' : '>> Command: ' + Module.arguments.join(" ") + ((Module.TOTAL_MEMORY) ? ".\nProcessing with " + Module.TOTAL_MEMORY + " bits. Please wait...\n" : '')});
+    postMessage({"type" : "start", "data" : Module.arguments.join(' ')});
+    postMessage({"type" : "stdout", "data" : ">> Command: " + Module.arguments.join(' ') + ((Module.TOTAL_MEMORY) ? ".\nProcessing with " + Module.TOTAL_MEMORY + " bits. Please wait...\n" : '')});
     /*  */
     var time = core.now();
     var result = ffmpeg_run(Module);
     var totaltimespent = core.now() - time;
-    postMessage({'type' : 'stdout', 'data' : '\n>> Finished processing (' + totaltimespent / 1000 + ' Seconds)'});
-    postMessage({'type' : 'done', 'data' : result, 'time' : totaltimespent});
+    postMessage({"type" : "stdout", "data" : "\n>> Finished processing (" + totaltimespent / 1000 + " Seconds)"});
+    postMessage({"type" : "done", "data" : result, "time" : totaltimespent});
   }
 };
 
-postMessage({'type' : 'ready'});
+postMessage({"type" : "ready"});
