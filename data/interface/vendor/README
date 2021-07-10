@@ -1,0 +1,10 @@
+This addon is using the compiled version of FFmpeg library using Emscripten.
+
+The compiled - ffmpeg-all-codecs.js - file is very large (around 26MB).
+Therefore, it is broken in to smaller pieces and then included in to the addon's package.
+
+The original - ffmpeg-all-codecs.js - file can be downloaded from:
+https://github.com/bgrins/videoconverter.js/blob/master/build/ffmpeg-all-codecs.js
+
+Then, it is broken in to multiple files with the following Linux command:
+split --bytes=3M --numeric=1 ffmpeg-all-codecs.js ffmpeg-all-codecs.part

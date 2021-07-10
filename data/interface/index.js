@@ -258,7 +258,7 @@ var config = {
       var workerblob = new Blob([workerasm], {"type": "text/javascript"})
       /*  */
       config.worker.element = new Worker(URL.createObjectURL(workerblob));
-      config.worker.element.postMessage({"type": "import", "path": chrome.runtime.getURL("/data/interface/vendor/ffmpeg/ffmpeg-all-codecs.js")});
+      config.worker.element.postMessage({"type": "import", "path": chrome.runtime.getURL("/data/interface/vendor/ffmpeg/")});
       config.worker.element.onmessage = function (e) {
         var message = e.data;
         if (message.type === "start") config.element.output.textContent = "Video & Audio Muxer received a command.\n\n";
