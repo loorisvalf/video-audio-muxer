@@ -9,7 +9,7 @@ Note 2: the default extension for the output video is set similar to the input v
 You can install this app as a PWA on your mobile device, moreover, it is available as a browser extension as-well-as a web application:
 
 Chrome: https://chrome.google.com/webstore/detail/video-audio-muxer/pegcngnogjhiaaogjnlghcinoleocmcl  
-Edge:   
+Edge: https://microsoftedge.microsoft.com/addons/detail/lejokiepipljmoibegmidahninmglofn  
 Firefox: https://addons.mozilla.org/en-US/firefox/addon/video-audio-muxer/  
 Opera: https://addons.opera.com/en/extensions/details/video-audio-muxer/  
 Webapp & PWA: https://webbrowsertools.com/video-audio-muxer/  
