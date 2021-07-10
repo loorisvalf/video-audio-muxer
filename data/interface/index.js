@@ -261,8 +261,10 @@ var config = {
       config.worker.element.postMessage({"type": "import", "path": chrome.runtime.getURL("/data/interface/vendor/ffmpeg/")});
       config.worker.element.onmessage = function (e) {
         var message = e.data;
-        if (message.type === "start") config.element.output.textContent = "Video & Audio Muxer received a command.\n\n";
-        else if (message.type === "stdout") {
+        /*  */
+        if (message.type === "start") {
+          config.element.output.textContent = "Video & Audio Muxer received a command.\n\n";
+        } else if (message.type === "stdout") {
           config.element.output.textContent += message.data + "\n";
           if (config.prevent.scroll === false) config.element.output.scrollTop = config.element.output.scrollHeight || 0;
         } else if (message.type === "ready") {

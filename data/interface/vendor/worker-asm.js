@@ -26,6 +26,8 @@ core.ffmpeg.fetch = () => {
       var blob = new Blob([core.ffmpeg.data], {"type": "text/javascript"});
       core.ffmpeg.url = URL.createObjectURL(blob);
       importScripts(core.ffmpeg.url);
+      /*  */
+      postMessage({"type" : "ready"});
     }
   });
 };
@@ -58,5 +60,3 @@ onmessage = function (e) {
     postMessage({"type" : "done", "data" : result, "time" : totaltimespent});
   }
 };
-
-postMessage({"type" : "ready"});
