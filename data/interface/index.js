@@ -1,8 +1,77 @@
+var background = {
+  "port": null,
+  "message": {},
+  "receive": function (id, callback) {
+    if (id) {
+      background.message[id] = callback;
+    }
+  },
+  "connect": function (port) {
+    chrome.runtime.onMessage.addListener(background.listener); 
+    /*  */
+    if (port) {
+      background.port = port;
+      background.port.onMessage.addListener(background.listener);
+      background.port.onDisconnect.addListener(function () {
+        background.port = null;
+      });
+    }
+  },
+  "send": function (id, data) {
+    if (id) {
+      if (background.port) {
+        if (background.port.name !== "webapp") {
+          chrome.runtime.sendMessage({
+            "method": id,
+            "data": data,
+            "path": "interface-to-background"
+          }, function () {
+            return chrome.runtime.lastError;
+          });
+        }
+      }
+    }
+  },
+  "post": function (id, data) {
+    if (id) {
+      if (background.port) {
+        background.port.postMessage({
+          "method": id,
+          "data": data,
+          "port": background.port.name,
+          "path": "interface-to-background"
+        });
+      }
+    }
+  },
+  "listener": function (e) {
+    if (e) {
+      for (let id in background.message) {
+        if (background.message[id]) {
+          if ((typeof background.message[id]) === "function") {
+            if (e.path === "background-to-interface") {
+              if (e.method === id) {
+                background.message[id](e.data);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
 var config = {
   "running": false,
-  "video": {"data": null},
-  "audio": {"data": null},
-  "output": {"src": null},
+  "video": {
+    "data": null
+  },
+  "audio": {
+    "data": null
+  },
+  "output": {
+    "src": null
+  },
   "nohandler": function (e) {
     e.preventDefault();
   },
@@ -46,12 +115,12 @@ var config = {
   },
   "loadend": {
     "video": function (e) {
-      var arraybuffer = e.target.result;
+      const arraybuffer = e.target.result;
       if (arraybuffer) config.video.data = new Uint8Array(arraybuffer);
       config.loader.stop();
     },
     "audio": function (e) {
-      var arraybuffer = e.target.result;
+      const arraybuffer = e.target.result;
       if (arraybuffer) config.audio.data = new Uint8Array(arraybuffer);
       config.loader.stop();
     }
@@ -72,15 +141,18 @@ var config = {
   "resize": {
     "timeout": null,
     "method": function () {
-      var context = document.documentElement.getAttribute("context");
-      if (context === "win") {
+      if (config.port.name === "win") {
         if (config.resize.timeout) window.clearTimeout(config.resize.timeout);
-        config.resize.timeout = window.setTimeout(function () {
+        config.resize.timeout = window.setTimeout(async function () {
+          const current = await chrome.windows.getCurrent();
+          /*  */
           config.storage.write("interface.size", {
-            "width": window.innerWidth || window.outerWidth,
-            "height": window.innerHeight || window.outerHeight
+            "top": current.top,
+            "left": current.left,
+            "width": current.width,
+            "height": current.height
           });
-        }, 300);
+        }, 1000);
       }
     }
   },
@@ -101,9 +173,9 @@ var config = {
     }
   },
   "download": function () {
-    var a = document.querySelector('a');
+    let a = document.querySelector('a');
     if (!a) {
-      var src = config.create.output.src();
+      let src = config.create.output.src();
       if (src) {
         a = document.createElement('a');
         a.textContent = config.create.output.name;
@@ -133,7 +205,7 @@ var config = {
     "write": function (id, data) {
       if (id) {
         if (data !== '' && data !== null && data !== undefined) {
-          var tmp = {};
+          let tmp = {};
           tmp[id] = data;
           config.storage.local[id] = data;
           chrome.storage.local.set(tmp, function () {});
@@ -148,7 +220,7 @@ var config = {
     "name": '',
     "connect": function () {
       config.port.name = "webapp";
-      var context = document.documentElement.getAttribute("context");
+      const context = document.documentElement.getAttribute("context");
       /*  */
       if (chrome.runtime) {
         if (chrome.runtime.connect) {
@@ -177,9 +249,9 @@ var config = {
       "name": null,
       "data": null,
       "src": function () {
-        var data = config.file.output.data;
-        var name = config.file.output.name;
-        var ext = name.split('.').length ? name.split('.')[1] : null;
+        const data = config.file.output.data;
+        const name = config.file.output.name;
+        const ext = name.split('.').length ? name.split('.')[1] : null;
         if (ext) {
           config.create.output.ext = ext;
           config.create.output.name = name;
@@ -192,15 +264,15 @@ var config = {
       },
       "player": function (display) {
         config.element.preview.style.display = display;
-        if (config.element.preview.children[1]) config.element.preview.children[1].remove();
+        if (config.element.preview.children[2]) config.element.preview.children[2].remove();
         /*  */
         if (display === "block" && config.file.output) {
-          var video = document.createElement("video");
+          const video = document.createElement("video");
           video.setAttribute("controls", "controls");
           video.setAttribute("preload", "metadata");
           config.element.preview.appendChild(video);
           /*  */
-          config.element.preview.children[1].src = config.output.src + "#t=0.5";
+          config.element.preview.children[2].src = config.output.src + "#t=0.5";
         }
       }
     }
@@ -210,7 +282,7 @@ var config = {
       config.element.drop.video.addEventListener("change", function (e) {
         if (e.target && e.target.files) {
           if (e.target.files.length && e.target.files[0]) {
-            var file = e.target.files[0];
+            const file = e.target.files[0];
             /*  */
             config.loader.start();
             config.file.video = file;
@@ -230,7 +302,7 @@ var config = {
       config.element.drop.audio.addEventListener("change", function (e) {
         if (e.target && e.target.files) {
           if (e.target.files.length && e.target.files[0]) {
-            var file = e.target.files[0];
+            const file = e.target.files[0];
             /*  */
             config.loader.start();
             config.file.audio = file;
@@ -251,16 +323,23 @@ var config = {
   "worker": {
     "ready": false,
     "element": null,
+    "path": chrome.runtime.getURL("/data/interface/vendor/worker-asm.js"),
     "init": async function () {
       if (config.worker.element) config.worker.element.terminate();
-      var response = await fetch(chrome.runtime.getURL("/data/interface/vendor/worker-asm.js"));
-      var workerasm = await response.text();
-      var workerblob = new Blob([workerasm], {"type": "text/javascript"})
       /*  */
-      config.worker.element = new Worker(URL.createObjectURL(workerblob));
-      config.worker.element.postMessage({"type": "import", "path": chrome.runtime.getURL("/data/interface/vendor/ffmpeg/")});
+      if (config.port.name === "webapp") {
+        const response = await fetch(config.worker.path);
+        const workerasm = await response.text();
+        const workerblob = new Blob([workerasm], {"type": "text/javascript"});
+        const workerpath = URL.createObjectURL(workerblob);
+        /*  */
+        config.worker.element = new Worker(workerpath);
+      } else {
+        config.worker.element = new Worker(config.worker.path);
+      }
+      /*  */
       config.worker.element.onmessage = function (e) {
-        var message = e.data;
+        const message = e.data;
         /*  */
         if (message.type === "start") {
           config.element.output.textContent = "Video & Audio Muxer received a command.\n\n";
@@ -280,6 +359,7 @@ var config = {
             if (config.output.src) {
               config.element.open.style.display = "inline-block";
               config.element.download.style.display = "inline-block";
+              /*  */
               window.setTimeout(function () {
                 config.create.output.player("block");
               }, 300);
@@ -287,6 +367,11 @@ var config = {
           }
         }
       };
+      /*  */
+      config.worker.element.postMessage({
+        "type": "import", 
+        "path": chrome.runtime.getURL("/data/interface/vendor/ffmpeg/")
+      });
     }
   },
   "command": {
@@ -297,12 +382,15 @@ var config = {
       config.element.download.style.display = "none";
     },
     "parse": function (text) {
-      var args = [];
+      let args = [];
       text = text.replace(/\s+/g, ' ');
       text.split('"').forEach(function(t, i) {
         t = t.trim();
-        if ((i % 2) === 1) args.push(t);
-        else args = args.concat(t.split(" "));
+        if ((i % 2) === 1) {
+          args.push(t);
+        } else {
+          args = args.concat(t.split(" "));
+        }
       });
       /*  */
       return args;
@@ -312,31 +400,31 @@ var config = {
         config.loader.start();
         config.command.clear();
         /*  */
-        var args = config.command.parse(command);
+        const args = config.command.parse(command);
         if (args.length > 1) {
-          var output = args[args.length - 1];
+          const output = args[args.length - 1];
           if (output && output.indexOf('.') === -1) {
             config.element.input.value = command + ".mkv";
             args[args.length - 1] = args[args.length - 1] + ".mkv";
           }
         }
         /*  */
-        var video = config.video.data && config.video.data.byteLength;
-        var audio = config.audio.data && config.audio.data.byteLength;
-        var files = [{"name": "video", "data": config.video.data}, {"name": "audio", "data": config.audio.data}];
-        var options = (video && audio) ? {"type": "command", "arguments": args, "files": files} : {"type": "command", "arguments": args};
+        const video = config.video.data && config.video.data.byteLength;
+        const audio = config.audio.data && config.audio.data.byteLength;
+        const files = [{"name": "video", "data": config.video.data}, {"name": "audio", "data": config.audio.data}];
+        const options = (video && audio) ? {"type": "command", "arguments": args, "files": files} : {"type": "command", "arguments": args};
         /*  */
         config.worker.element.postMessage(options);
       }
     }
   },
   "load": function () {
-    var run = document.querySelector(".run");
-    var clear = document.querySelector(".clear");
-    var reload = document.getElementById("reload");
-    var support = document.getElementById("support");
-    var donation = document.getElementById("donation");
-    var actions = [...document.querySelectorAll(".action")];
+    const run = document.querySelector(".run");
+    const clear = document.querySelector(".clear");
+    const reload = document.getElementById("reload");
+    const support = document.getElementById("support");
+    const donation = document.getElementById("donation");
+    const actions = [...document.querySelectorAll(".action")];
     /*  */
     config.element.input = document.querySelector("#input");
     config.element.open = document.querySelector(".preview");
@@ -358,26 +446,35 @@ var config = {
     config.reader.video.addEventListener("loadend", config.loadend.video, false);
     config.reader.audio.addEventListener("loadend", config.loadend.audio, false);
     config.element.open.addEventListener("click", function () {config.create.output.player("block")});
+    config.element.preview.children[1].addEventListener("click", function () {config.element.download.click()});
     config.element.preview.children[0].addEventListener("click", function () {config.create.output.player("none")});
-    config.element.input.addEventListener("keydown", function (e) {if (e.keyCode === 13) config.command.run(config.element.input.value)}, false);
-    config.element.output.addEventListener("scroll", function (e) {config.prevent.scroll = config.element.output.scrollHeight - config.element.output.scrollTop > 450});
+    /*  */
+    config.element.output.addEventListener("scroll", function () {
+      config.prevent.scroll = config.element.output.scrollHeight - config.element.output.scrollTop > 450;
+    });
     /*  */
     support.addEventListener("click", function () {
-      var url = config.addon.homepage();
+      const url = config.addon.homepage();
       chrome.tabs.create({"url": url, "active": true});
     }, false);
     /*  */
     donation.addEventListener("click", function () {
-      var url = config.addon.homepage() + "?reason=support";
+      const url = config.addon.homepage() + "?reason=support";
       chrome.tabs.create({"url": url, "active": true});
     }, false);
     /*  */
-    actions.map(function (action) {
+    config.element.input.addEventListener("keydown", function (e) {
+      if (e.keyCode === 13) {
+        config.command.run(config.element.input.value);
+      }
+    }, false);
+    /*  */
+    actions.forEach(function (action) {
       action.addEventListener("click", function (e) {
-        var command = e.target.getAttribute("data-command");
+        let command = e.target.getAttribute("data-command");
         if (config.file.video && command.indexOf("output") !== -1) {
-          var name = config.file.video.name;
-          var ext = name.split('.').length ? name.split('.')[1] : "webm";
+          const name = config.file.video.name;
+          const ext = name.split('.').length ? name.split('.')[1] : "webm";
           command = command + '.' + ext;
         }
         /*  */
