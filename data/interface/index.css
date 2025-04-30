@@ -84,14 +84,26 @@ body {
   background-size: 12px;
 }
 
-.run {
+.run, .theme {
   width: 128px;
   float: right;
   color: #86b228;
+  line-height: 0;
   font-size: 17px;
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
+}
+
+.theme {
+  width: 42px;
+  margin-left: 5px;
+}
+
+.theme svg {
+  fill: #555;
+  pointer-events: none;
+  vertical-align: middle;
 }
 
 #terminal {
@@ -122,12 +134,9 @@ body {
   width: 100%;
   color: #333;
   padding: 10px;
-  height: 350px;
   font-size: 13px;
   margin: 5px auto;
   text-align: left;
-  min-height: 350px;
-  max-height: 350px;
   line-height: 22px;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -135,15 +144,18 @@ body {
   font-family: monospace;
   box-sizing: border-box;
   text-overflow: ellipsis;
+  height: calc(100vh - 224px);
   background-color: transparent;
+  min-height: calc(100vh - 224px);
+  max-height: calc(100vh - 224px);
   border: solid 1px rgba(0,0,0,0.1);
 }
 
 #loader {
+  left: 0;
+  top: 58px;
   border: 0;
-  top: 52px;
   padding: 0;
-  left: -4px;
   width: 52px;
   height: 14px;
   margin: 0 auto;
@@ -177,7 +189,7 @@ body {
   display: none;
   position: fixed;
   text-align: center;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgb(0 0 0 / 85%);
 }
 
 #preview video {
@@ -189,10 +201,12 @@ body {
   margin-top: 10%;
   max-width: 600px;
   vertical-align: middle;
+  border: solid 1px rgb(255 255 255 / 25%);
 }
 
 #preview div {
   width: 52px;
+  margin: 5px;
   color: #fff;
   height: 52px;
   cursor: pointer;
@@ -202,6 +216,7 @@ body {
   text-align: center;
   font-family: monospace;
   background: rgba(0,0,0,0.7);
+  border: solid 1px rgb(255 255 255 / 25%);
 }
 
 #preview div svg {
@@ -299,8 +314,21 @@ body {
 	100% {opacity: 1}
 }
 
+@media (max-width: 650px) {
+  html[preview] #output {
+    height: calc(100vh - 274px);
+    min-height: calc(100vh - 274px);
+    max-height: calc(100vh - 274px);
+  }
+}
+
 @media (max-width: 500px) {
-  .run {float: none}
+  .run, .theme {
+    float: none;
+  }
+  .theme {
+    margin-left: 0;
+  }
   .toolbar {
     top: 0;
     right: 0;
@@ -312,11 +340,11 @@ body {
     margin-top: 5px;
   }
   #terminal {
-    margin: 0 auto;
     text-align: center;
   }
   #preview video {
-    margin-top: 15%;
+    margin-top: 20%;
+    margin-bottom: 0;
   }
   .toolbar, 
   #video-dropbox span, 
@@ -327,34 +355,82 @@ body {
   #audio-dropbox input {
     color: transparent;
   }
-}
-
-@media (max-width: 350px) {
   .button {
     width: 100%;
     padding: 15px 0;
     margin-bottom: 0;
   }
-  #preview video {
-    margin-top: 20%;
-    margin-bottom: 0;
+  #video-fileinfo, #audio-fileinfo {
+    left: 7px;
+    bottom: 7px;
+  }
+  #output {
+    height: calc(100vh - 458px);
+    min-height: calc(100vh - 458px);
+    max-height: calc(100vh - 458px);
+  }
+  html[preview] #output {
+    height: calc(100vh - 552px);
+    min-height: calc(100vh - 552px);
+    max-height: calc(100vh - 552px);
   }
 }
 
-@-moz-document url-prefix() {
-  #input,
-  #output,
-  .button,
-  #terminal,
-  #preview div,
-  #video-fileinfo, #audio-fileinfo,
-  #video-dropbox input, #audio-dropbox input {
-    font-size: 11px;
-    font-weight: normal;
-    font-family: monaco, "andale mono", "lucida console", "courier new", monospace;
-  }
-}
-
-html[context="webapp"] .toolbar {
+html[context='webapp'] .toolbar {
   display: none;
+}
+
+html[theme='dark'], 
+html[theme='dark'] body {
+  color: #ebebeb;
+  color-scheme: dark;
+  background-color: #1e1e1e;
+}
+
+html[theme='dark'] .button {
+  color: #ebebeb;
+  background-color: #1e1e1e;
+}
+
+html[theme='dark'] #input {
+  color: #5a99ff;
+  background-color: #1e1e1e;
+  border-color: rgb(255 255 255 / 75%) !important;
+}
+
+html[theme='dark'] .download {
+  color: transparent;
+}
+
+html[theme='dark'] .run,
+html[theme='dark'] .theme {
+  color: #86b228;
+}
+
+html[theme='dark'] #output,
+html[theme='dark'] #video-fileinfo, 
+html[theme='dark'] #audio-fileinfo,
+html[theme='dark'] #audio-dropbox span,
+html[theme='dark'] #video-dropbox span, 
+html[theme='dark'] #video-dropbox input, 
+html[theme='dark'] #audio-dropbox input {
+  color: #ebebeb;
+}
+
+html[theme='dark'] #input,
+html[theme='dark'] .button,
+html[theme='dark'] #output,
+html[theme='dark'] #video-dropbox,
+html[theme='dark'] #audio-dropbox {
+  border-color: rgb(255 255 255 / 25%);
+}
+
+html[theme='dark'] .button:hover,
+html[theme='dark'] .toolbar table tr td:hover {
+  background-color: rgb(255 255 255 / 5%);
+}
+
+html[theme='dark'] .theme svg,
+html[theme='dark'] .toolbar table tr td svg {
+  fill: #ebebeb;
 }

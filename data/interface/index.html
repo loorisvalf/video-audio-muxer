@@ -55,15 +55,20 @@
         <button class="button action" data-command="-codecs">Codecs</button>
         <button class="button action" data-command="-i video -i audio -c:v copy -c:a copy -shortest -strict experimental output">Command</button>
         <button class="button clear">Clear</button>
-        <button class="button run">Mux</button>
+        <button class="button theme" title="Dark | Light mode">
+          <svg width="11" height="11" viewBox="0 0 122.8799 122.8799">
+            <path d="M 63.550085,1.4875858 A 60.101027,60.101027 0 0 0 3.45,61.587666 60.101027,60.101027 0 0 0 63.550085,121.6899 60.101027,60.101027 0 0 0 119.56373,83.196612 50.463617,50.463617 0 0 1 102.0998,86.352622 50.463617,50.463617 0 0 1 51.637166,35.887862 50.463617,50.463617 0 0 1 65.189815,1.5691534 60.101027,60.101027 0 0 0 63.550085,1.4875858 Z"/>
+          </svg>
+        </button>
         <button class="button preview" title="Click to see preview">Preview</button>
+        <button class="button run">Mux</button>
         <button class="button download" title="Click to download the output media">Download</button>
         <input id="input" value="-help">
         <pre id="output">Video & Audio Muxer is getting ready, please wait...</pre>
       </div>
       <div id="preview" class="fade-in">
         <div class="left" title="Close">
-          <svg width="12" height="12" viewBox="0 0 512 512">
+          <svg width="14" height="14" viewBox="0 0 512 512">
             <g transform="matrix(1.0842783,0,0,1.0842783,-18.118477,-24.53228)">
               <rect width="499.08917" height="65.118034" x="112.26851" y="-28.276203" ry="0" transform="rotate(45)"/>
               <rect width="499.08716" height="65.118034" x="-245.26077" y="329.25357" ry="0" transform="matrix(-0.70710678,0.70710678,0.70710678,0.70710678,0,0)"/>
@@ -71,7 +76,7 @@
           </svg>          
         </div>
         <div class="right" title="Download">
-          <svg width="12" height="12" viewBox="0 0 16 16">
+          <svg width="14" height="14" viewBox="0 0 16 16">
             <path d="M 7,15.375 2.54,10 C 2.287,9.695 2,9.461 2,9 2,8.375 2.516,8 3,8 H 6 V 1 C 6,0.45 6.45,0 7,0 H 9 C 9.55,0 10,0.45 10,1 V 8 H 13 C 13.484,8 14,8.375 14,9 14,9.461 13.713,9.695 13.46,10 L 9,15.375 C 8.688,15.758 8.445,16 8,16 7.555,16 7.313,15.758 7,15.375 Z"/>
           </svg>
         </div>
