@@ -366,6 +366,7 @@ var config = {
         /*  */
         await import(config.ffmpeg.URL.base + "ffmpeg.js");
         config.ffmpeg.core = new FFmpegWASM.FFmpeg();
+        await config.ffmpeg.core.load(config.ffmpeg.options);
         /*  */
         config.loader.stop(4);
         config.worker.ready = true;
