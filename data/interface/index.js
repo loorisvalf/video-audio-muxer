@@ -571,28 +571,43 @@ var config = {
             const videoext = '.' + config.file.video.name.split('.')[1];
             const lookupext = {
               ".mov": {
-                ".m4a": [".mp4", ".mov"]
+                ".ogg": [".mkv"],
+                ".opus": [".mkv"],
+                ".m4a": [".mp4", ".mov"],
+                ".aac": [".mp4", ".mov"],
+                ".mp3": [".mp4", ".mov"]
               },
               ".avi": {
-                ".mp3": [".mkv", ".mp4"]
+                ".ogg": [".mkv"],
+                ".opus": [".mkv"],
+                ".aac": [".mp4", ".mkv"],
+                ".m4a": [".mp4", ".mkv"],
+                ".mp3": [".avi", ".mkv", ".mp4"]
               },
               ".flv": {
-                ".aac": [".mp4", ".mkv"]
+                ".ogg": [".mkv"],
+                ".opus": [".mkv"],
+                ".aac": [".mp4", ".mkv"],
+                ".mp3": [".mp4", ".mkv"],
+                ".m4a": [".mp4", ".mkv"]
               },
               ".webm": {
                 ".mp3": [".mkv"],
                 ".ogg": [".webm"],
                 ".opus": [".webm"],
+                ".aac": [".mkv", ".mp4"],
                 ".m4a": [".mp4", ".mkv"]
               },
               ".mp4": {
-                ".m4a": [".mp4"],
                 ".ogg": [".mkv"],
+                ".m4a": [".mp4"],
+                ".aac": [".mp4"],
                 ".opus": [".mkv"],
                 ".mp3": [".mp4", ".mkv"]
               },
               ".mkv": {
                 ".m4a": [".mkv", ".mp4"],
+                ".aac": [".mkv", ".mp4"],
                 ".mp3": [".mkv", ".mp4"],
                 ".ogg": [".mkv", ".webm"],
                 ".opus": [".mkv", ".webm"]

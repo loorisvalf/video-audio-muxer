@@ -31,11 +31,11 @@ body {
   vertical-align: middle;
   font-family: monospace;
   transition: 300ms ease all;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .button:hover {
-  background-color: rgba(0,0,0,0.03);
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .toolbar {
@@ -64,7 +64,7 @@ body {
 }
 
 .toolbar table tr td:hover {
-  background-color: rgba(0,0,0,0.05);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .toolbar table tr td svg {
@@ -127,7 +127,7 @@ body {
   font-family: monospace;
   vertical-align: middle;
   box-sizing: border-box;
-  border: 1px solid rgba(0,0,0,0.5);
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 #output {
@@ -148,7 +148,7 @@ body {
   background-color: transparent;
   min-height: calc(100vh - 224px);
   max-height: calc(100vh - 224px);
-  border: solid 1px rgba(0,0,0,0.1);
+  border: solid 1px rgba(0, 0, 0, 0.1);
 }
 
 #loader {
@@ -215,8 +215,12 @@ body {
   line-height: 52px;
   text-align: center;
   font-family: monospace;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   border: solid 1px rgb(255 255 255 / 25%);
+}
+
+#preview div:hover {
+  background: rgba(0, 0, 0, 0.9);
 }
 
 #preview div svg {
@@ -241,7 +245,7 @@ body {
   text-align: center;
   display: inline-block;
   width: calc(50% - 5px);
-  border: solid 1px rgba(0,0,0,0.1);
+  border: solid 1px rgba(0, 0, 0, 0.1);
 }
 
 #video-dropbox {float: left}
@@ -262,14 +266,22 @@ body {
 }
 
 #video-dropbox svg, #audio-dropbox svg {
+  padding: 1px 7px;
   position: absolute;
+  border-radius: 2px;
   pointer-events: none;
-  top: calc(50% - 12px);
-  left: calc(50% - 10px);
+  top: calc(50% - 16px);
+  left: calc(50% - 22px);
+  background-color: #fff;
 }
 
-#video-dropbox svg {fill: #e34040}
-#audio-dropbox svg {fill: #518ff5}
+#video-dropbox svg {
+  fill: #e34040;
+}
+
+#audio-dropbox svg {
+  fill: #518ff5;
+}
 
 #video-dropbox input, #audio-dropbox input {
   left: 0;
@@ -296,9 +308,9 @@ body {
   font-weight: 600;
   text-align: right;
   position: absolute;
-  left: calc(50% - 68px);
+  left: calc(50% - 92px);
   font-family: monospace;
-  bottom: calc(50% - 11px);
+  bottom: calc(50% - 8px);
   background-color: transparent;
 }
 
@@ -335,7 +347,7 @@ body {
     right: 0;
   }
   .container {
-    padding: 0;
+    padding: 3px;
   }
   #input {
     margin-top: 5px;
@@ -361,14 +373,19 @@ body {
     padding: 15px 0;
     margin-bottom: 0;
   }
-  #video-fileinfo, #audio-fileinfo {
+  #video-fileinfo,
+  #audio-fileinfo {
     left: 7px;
     bottom: 7px;
   }
+  #video-dropbox svg,
+  #audio-dropbox svg {
+    top: calc(50% - 5px);
+  }
   #output {
-    height: calc(100vh - 458px);
-    min-height: calc(100vh - 458px);
-    max-height: calc(100vh - 458px);
+    height: calc(100vh - 454px);
+    min-height: calc(100vh - 454px);
+    max-height: calc(100vh - 454px);
   }
   html[preview] #output {
     height: calc(100vh - 552px);
@@ -397,6 +414,11 @@ html[theme='dark'] #input {
   color: #5a99ff;
   background-color: #1e1e1e;
   border-color: rgb(255 255 255 / 75%) !important;
+}
+
+html[theme='dark'] #video-dropbox svg,
+html[theme='dark'] #audio-dropbox svg {
+  background-color: rgb(255 255 255 / 95%);
 }
 
 html[theme='dark'] .download {
@@ -428,7 +450,7 @@ html[theme='dark'] #audio-dropbox {
 
 html[theme='dark'] .button:hover,
 html[theme='dark'] .toolbar table tr td:hover {
-  background-color: rgb(255 255 255 / 5%);
+  background-color: rgb(255 255 255 / 10%);
 }
 
 html[theme='dark'] .theme svg,
